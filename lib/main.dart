@@ -4,22 +4,6 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-class Person {
-  final String id;
-  final String firstname;
-  final String lastname;
-
-  Person(
-      {@required this.id, @required this.firstname, @required this.lastname});
-
-  factory Person.fromJson(Map json) {
-    return Person(
-        id: json['_id'],
-        firstname: json['firstname'],
-        lastname: json['lastname']);
-  }
-}
-
 // Future<List<Person>> fetchData() async {
 //   final response = await http.get(Uri.http('localhost:12345', '/person'));
 //   if (response.statusCode == 200) {
@@ -29,12 +13,16 @@ class Person {
 // }
 
 Future<String> fetchData() async {
-  final response = await http.get(Uri.https('localhost:12345', '/get'));
+  final response = await http.get(Uri.https('localhost:12345', '/person'));
+  print(JsonEncoder.withIndent('    ').convert(response));
   return response.body;
 }
 
 void main() {
-  runApp(MaterialApp(home: Center(child: FutureBuilder(
+  runApp(MaterialApp(
+      home: Center(
+          child: FutureBuilder(
+    future: fetchData(),
     builder: (context, snapshot) {
       if (snapshot.hasData)
         return Text('Data : ${snapshot.data}');
