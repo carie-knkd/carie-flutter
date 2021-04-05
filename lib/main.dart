@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:http/http.dart' as http;
+import 'package:flutter_go_app/screens/phone_screen.dart';
 import 'package:flutter/material.dart';
 
 // Future<List<Person>> fetchData() async {
@@ -12,29 +9,24 @@ import 'package:flutter/material.dart';
 //     throw Exception('failed to load db');
 // }
 
-Future<String> fetchData() async {
-  final response = await http.get(Uri.https('localhost:12345', '/person'));
-  print(JsonEncoder.withIndent('    ').convert(response));
-  return response.body;
-}
+// Future<String> fetchData() async {
+//   final response = await http.get(Uri.http('10.43.176.168:8000', '/person'));
+//   print(JsonEncoder.withIndent('    ').convert(response));
+//   PhoneNumber
+//   return response.body;
+// }
 
-void main() {
-  runApp(MaterialApp(
-      home: Center(
-          child: FutureBuilder(
-    future: fetchData(),
-    builder: (context, snapshot) {
-      if (snapshot.hasData)
-        return Text('Data : ${snapshot.data}');
-      else if (snapshot.hasError)
-        return Text('ERROR!');
-      else
-        return CircularProgressIndicator();
-    },
-  ))));
-  // runApp(MaterialApp(
-  //   home: Center(
-  //     child: Text('Hello'),
-  //   ),
-  // ));
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Example Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: PhoneScreen(),
+    );
+  }
 }

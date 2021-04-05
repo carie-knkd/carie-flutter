@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.flutter_go_app">
    <application
+        android:usesCleartextTraffic="true"
         android:label="flutter_go_app"
         android:icon="@mipmap/ic_launcher">
         <activity
