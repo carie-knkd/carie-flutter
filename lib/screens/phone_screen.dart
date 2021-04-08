@@ -2,6 +2,8 @@ import 'package:international_phone_input/international_phone_input.dart';
 import 'consumer_choosing_screen.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_go_app/components/driver_info_widget.dart';
+import 'package:flutter_go_app/model/Driver.dart';
 
 class PhoneScreen extends StatefulWidget {
   PhoneScreen();
@@ -43,7 +45,7 @@ class PhoneScreenSstate extends State<PhoneScreen> {
         resizeToAvoidBottomInset: false,
         body: DecoratedBox(
           decoration: BoxDecoration(color: kPrimaryColor),
-          child: ListView(
+          child: Column(
             //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
@@ -86,11 +88,13 @@ class PhoneScreenSstate extends State<PhoneScreen> {
                       child: ElevatedButton(
                           style:
                               ElevatedButton.styleFrom(primary: Colors.white),
-                          onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ConsumerChoosingScreen())),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ConsumerChoosingScreen()));
+                          },
                           child: Text("Tiếp tục",
                               style: TextStyle(
                                 color: kPrimaryColor,
