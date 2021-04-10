@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/components/constants.dart';
 
+import 'driver_choosing_screen.dart';
+
 class ConsumerChoosingScreen extends StatefulWidget {
   ConsumerChoosingScreen();
   @override
@@ -17,6 +19,7 @@ class ConsumerChoosingScreenState extends State<ConsumerChoosingScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
+        
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
@@ -113,7 +116,13 @@ class ConsumerChoosingScreenState extends State<ConsumerChoosingScreen> {
                     : Transform.scale(
                         scale: 1.2,
                         child: MaterialButton(
-                            onPressed: () => print("Button"),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DriverChoosingScreen()));
+                            },
                             child: Text("Tiếp tục",
                                 style: TextStyle(
                                   color: kPrimaryColor,
