@@ -1,7 +1,9 @@
 import 'package:international_phone_input/international_phone_input.dart';
-
+import 'consumer_choosing_screen.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_go_app/components/driver_info_widget.dart';
+import 'package:flutter_go_app/model/Driver.dart';
 
 class PhoneScreen extends StatefulWidget {
   PhoneScreen();
@@ -38,25 +40,27 @@ class PhoneScreenSstate extends State<PhoneScreen> {
 
     // final TextEditingController controller = TextEditingController();
     // PhoneNumber number = PhoneNumber(isoCode: 'VN');
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: DecoratedBox(
           decoration: BoxDecoration(color: kPrimaryColor),
-          child: ListView(
+          child: Column(
             //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: 80,
+                      height: height / 10,
                     ),
                     Text(
                       "CARIE",
-                      style: TextStyle(fontSize: 50, color: Colors.white),
+                      style:
+                          TextStyle(fontSize: height / 10, color: Colors.white),
                     ),
                     SizedBox(
-                      height: 237,
+                      height: height * 2 / 15,
                     ),
                     Transform.scale(
                         scale: 0.95,
@@ -77,14 +81,20 @@ class PhoneScreenSstate extends State<PhoneScreen> {
                               )),
                         )),
                     SizedBox(
-                      height: 30,
+                      height: height / 20,
                     ),
                     Transform.scale(
                       scale: 1.2,
                       child: ElevatedButton(
                           style:
                               ElevatedButton.styleFrom(primary: Colors.white),
-                          onPressed: () => print("Button"),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ConsumerChoosingScreen()));
+                          },
                           child: Text("Tiếp tục",
                               style: TextStyle(
                                 color: kPrimaryColor,
