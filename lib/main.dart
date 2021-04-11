@@ -3,6 +3,8 @@ import 'package:flutter_go_app/screens/driver_choosing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/screens/phone_screen.dart';
 
+import 'screens/phone_screen.dart';
+
 // Future<List<Person>> fetchData() async {
 //   final response = await http.get(Uri.http('localhost:12345', '/person'));
 //   if (response.statusCode == 200) {
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: DriverChoosingScreen(),
+      home: PhoneScreen(),
     );
   }
 }

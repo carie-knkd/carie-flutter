@@ -8,11 +8,28 @@ import 'package:flutter_go_app/model/Person.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter_go_app/model/Driver.dart';
 import 'package:flutter_go_app/components/driver_info_widget.dart';
+import 'package:flutter_go_app/components/constants.dart';
 
 class DriverChoosingScreen extends StatefulWidget {
   DriverChoosingScreen();
   @override
   State<DriverChoosingScreen> createState() => DriverChoosingScreenState();
+}
+
+void listDrivers() async {
+  final url = 'http://$publicIP:12345/person';
+  print(url);
+  final client = new HttpClient();
+  final request =
+      await client.getUrl(Uri.parse(url)).timeout(Duration(seconds: 10));
+  final response = await request.close();
+  print(response.statusCode);
+  print(response.contentLength);
+  // Iterable l = json.decode(response.body);
+  // List<Person> list =
+  //     List<Driver>.from(l.map((e) => Driver.fromJson(e)).toList());
+  // return list;
+  // return null;
 }
 
 class DriverChoosingScreenState extends State<DriverChoosingScreen> {
@@ -31,6 +48,10 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
             padding: EdgeInsets.all(10),
             child: Column(
               children: [
+                MaterialButton(
+                  onPressed: () => listDrivers(),
+                  child: Text("List Drivers"),
+                ),
                 Text(
                   "Xin chào bla bla",
                   style: TextStyle(
@@ -88,19 +109,4 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
           ),
         ]));
   }
-}
-
-Future<List<Driver>> listDrivers() async {
-  print("Waiting...");
-  final url = 'http://192.168.68.223:80/person';
-  final client = new HttpClient();
-  final request = await client.getUrl(Uri.parse(url));
-  final response = await request.close();
-  print(response.statusCode);
-  print(response.contentLength);
-  // Iterable l = json.decode(response.body);
-  // List<Person> list =
-  //     List<Driver>.from(l.map((e) => Driver.fromJson(e)).toList());
-  // return list;
-  return null;
 }
