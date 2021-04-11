@@ -41,8 +41,10 @@ void showDriverInfo(BuildContext context, Driver driver) {
             title: Text("Book this driver?"),
             content: Text(driver.toString()),
             actions: [
-              ElevatedButton(
-                  onPressed: () => print("BOOKED"), child: Text("Book")),
+              Center(
+                child: ElevatedButton(
+                    onPressed: () => print("BOOKED"), child: Text("Book")),
+              ),
             ],
           ));
 }
