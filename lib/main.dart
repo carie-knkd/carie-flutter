@@ -1,7 +1,10 @@
+import 'package:flutter_go_app/components/time_selector.dart';
+import 'package:flutter_go_app/screens/adding_schedule_screen.dart';
 import 'package:flutter_go_app/screens/consumer_choosing_screen.dart';
 import 'package:flutter_go_app/screens/driver_choosing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/screens/phone_screen.dart';
+import 'package:flutter_go_app/screens/schedule_screen.dart';
 
 import 'screens/phone_screen.dart';
 
@@ -30,7 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PhoneScreen(),
+      home: ScheduleScreen(),
     );
   }
 }

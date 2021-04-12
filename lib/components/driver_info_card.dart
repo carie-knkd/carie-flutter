@@ -4,7 +4,7 @@ import 'package:flutter_go_app/model/Driver.dart';
 
 class DriverInfoWidget extends StatelessWidget {
   final Driver driver;
-  DriverInfoWidget(this.driver);
+  DriverInfoWidget({@required this.driver});
 
   @override
   Widget build(BuildContext context) {
