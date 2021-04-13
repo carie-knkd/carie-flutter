@@ -4,16 +4,29 @@ import 'package:flutter_go_app/components/constants.dart';
 class TimeSelector extends StatefulWidget {
   final ValueChanged<int> onHourChanged;
   final ValueChanged<int> onMinuteChanged;
+  final int hourOffset;
+  final int minuteOffset;
   TimeSelector(
-      {Key key, @required this.onHourChanged, @required this.onMinuteChanged});
+      {Key key,
+      @required this.onHourChanged,
+      @required this.onMinuteChanged,
+      @required this.hourOffset,
+      @required this.minuteOffset});
 
   @override
-  TimeSelectorState createState() => TimeSelectorState();
+  TimeSelectorState createState() =>
+      TimeSelectorState(hourOffset: hourOffset, minuteOffset: minuteOffset);
 }
 
 class TimeSelectorState extends State<TimeSelector> {
-  int hour = 0;
-  int minute = 0;
+  int hour;
+  int minute;
+  int hourOffset;
+  int minuteOffset;
+  TimeSelectorState({@required this.hourOffset, @required this.minuteOffset}) {
+    hour = hourOffset;
+    minute = minuteOffset;
+  }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -28,17 +41,19 @@ class TimeSelectorState extends State<TimeSelector> {
                 itemExtent: height / 13,
                 onSelectedItemChanged: (value) {
                   setState(() {
-                    hour = value;
-                    widget.onHourChanged(value % 24);
+                    hour = value + hourOffset;
+                    widget.onHourChanged((value + hourOffset) % 24);
                   });
                 },
                 physics: FixedExtentScrollPhysics(),
                 childDelegate: ListWheelChildBuilderDelegate(
                   builder: (BuildContext context, int index) => Text(
-                      (index % 24 < 10) ? "0${index % 24}" : "${index % 24}",
+                      ((index + hourOffset) % 24 < 10)
+                          ? "0${(index + hourOffset) % 24}"
+                          : "${(index + hourOffset) % 24}",
                       style: TextStyle(
                           fontSize: height * 0.038,
-                          color: (hour == index)
+                          color: (hour == index + hourOffset)
                               ? kPrimaryColor
                               : kUnhighlightedColor)),
                 ))),
@@ -50,17 +65,19 @@ class TimeSelectorState extends State<TimeSelector> {
                 itemExtent: height / 13,
                 onSelectedItemChanged: (value) {
                   setState(() {
-                    minute = value;
-                    widget.onMinuteChanged(value % 60);
+                    minute = value + minuteOffset;
+                    widget.onMinuteChanged((value + minuteOffset) % 60);
                   });
                 },
                 physics: FixedExtentScrollPhysics(),
                 childDelegate: ListWheelChildBuilderDelegate(
                   builder: (BuildContext context, int index) => Text(
-                      (index % 60 < 10) ? "0${index % 60}" : "${index % 60}",
+                      ((index + minuteOffset) % 60 < 10)
+                          ? "0${(index + minuteOffset) % 60}"
+                          : "${(index + minuteOffset) % 60}",
                       style: TextStyle(
                           fontSize: height * 0.038,
-                          color: (minute == index)
+                          color: (minute == index + minuteOffset)
                               ? kPrimaryColor
                               : kUnhighlightedColor)),
                 ))),

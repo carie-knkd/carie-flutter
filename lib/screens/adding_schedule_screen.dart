@@ -6,21 +6,42 @@ import 'package:flutter_go_app/model/Schedule.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
 class AddingScheduleScreen extends StatefulWidget {
-  AddingScheduleScreen();
+  final Schedule schedule;
+  //AddingScheduleScreen();
+  AddingScheduleScreen({this.schedule});
   @override
-  State<StatefulWidget> createState() => AddingScheduleScreenState();
+  State<StatefulWidget> createState() =>
+      AddingScheduleScreenState(schedule: schedule);
 }
 
 class AddingScheduleScreenState extends State<AddingScheduleScreen> {
-  final content = TextEditingController();
-  final description = TextEditingController();
-  int fromHour = 0;
-  int fromMinute = 0;
-  int toHour = 0;
-  int toMinute = 0;
+  TextEditingController content;
+  TextEditingController description;
+  int fromHour;
+  int fromMinute;
+  int toHour;
+  int toMinute;
 
-  List<bool> daysInWeek = List<bool>.filled(7, false);
+  List<bool> daysInWeek;
   Schedule schedule;
+
+  AddingScheduleScreenState({@required this.schedule}) {
+    if (schedule != null) {
+      content = TextEditingController(text: schedule.content);
+      description = TextEditingController(text: schedule.description);
+      fromHour = schedule.from.hour;
+      fromMinute = schedule.from.minute;
+      toHour = schedule.to.hour;
+      toMinute = schedule.to.minute;
+      daysInWeek = schedule.daysInWeek;
+    } else {
+      daysInWeek = List<bool>.filled(7, false);
+      content = TextEditingController();
+      description = TextEditingController();
+      fromHour = fromMinute = toHour = toMinute = 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -112,6 +133,8 @@ class AddingScheduleScreenState extends State<AddingScheduleScreen> {
                         ),
                       ),
                       TimeSelector(
+                        hourOffset: fromHour,
+                        minuteOffset: fromMinute,
                         onHourChanged: (value) {
                           fromHour = value;
                         },
@@ -136,6 +159,8 @@ class AddingScheduleScreenState extends State<AddingScheduleScreen> {
                         ),
                       ),
                       TimeSelector(
+                        hourOffset: toHour,
+                        minuteOffset: toMinute,
                         onHourChanged: (value) {
                           toHour = value;
                         },

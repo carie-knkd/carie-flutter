@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter_go_app/model/Schedule.dart';
+import 'package:flutter_go_app/screens/adding_schedule_screen.dart';
 
 // ignore: must_be_immutable
 class ScheduleCard extends StatefulWidget {
@@ -14,13 +15,18 @@ class ScheduleCard extends StatefulWidget {
 class ScheduleCardState extends State<ScheduleCard> {
   String parseFromList(List<bool> list) {
     String result = "";
+    bool everyday = true;
     for (int i = 0; i < 7; i++) {
-      if (list[i]) if (i != 6)
-        result += (i + 2).toString() + ", ";
-      else
-        result += "CN, ";
+      if (list[i]) {
+        if (i != 6)
+          result += (i + 2).toString() + ", ";
+        else
+          result += "CN, ";
+      } else
+        everyday = false;
     }
-    return result.substring(0, result.length - 2);
+
+    return everyday ? "Mỗi ngày" : result.substring(0, result.length - 2);
   }
 
   String parseFromTimeOfDay(TimeOfDay t) {
@@ -38,74 +44,97 @@ class ScheduleCardState extends State<ScheduleCard> {
   Widget build(BuildContext context) {
     Schedule schedule = widget.schedule;
     double height = MediaQuery.of(context).size.height;
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(
-              color: schedule.isEnabled ? kPrimaryColor : kUnhighlightedColor),
-          borderRadius: BorderRadius.circular(8)),
-      padding: EdgeInsets.fromLTRB(
-          height * 0.02, height * 0.01, height * 0.01, height * 0.01),
-      height: height / 5.5,
-      width: height / 5,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: height / 3.1,
-                child: RichText(
-                    text: TextSpan(children: [
-                  TextSpan(
-                      text: schedule.content,
+    double width = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: () async {
+        final Schedule schedule = await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AddingScheduleScreen(
+                      schedule: widget.schedule,
+                    )));
+        setState(() {
+          widget.schedule = schedule;
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+                color:
+                    schedule.isEnabled ? kPrimaryColor : kUnhighlightedColor),
+            borderRadius: BorderRadius.circular(8)),
+        padding: EdgeInsets.fromLTRB(
+            height * 0.02, height * 0.01, height * 0.01, height * 0.01),
+        height: height / 5.5,
+        width: width * 0.9,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: width * 0.62,
+                  child: RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: schedule.content,
+                        style: TextStyle(
+                            color: schedule.isEnabled
+                                ? kPrimaryColor
+                                : kUnhighlightedColor,
+                            fontSize: height / 40)),
+                    TextSpan(
+                      text: '\n' + schedule.description,
                       style: TextStyle(
                           color: schedule.isEnabled
-                              ? kPrimaryColor
+                              ? Colors.black
                               : kUnhighlightedColor,
-                          fontSize: height / 40)),
-                  TextSpan(
-                    text: '\n' + schedule.description,
-                    style: TextStyle(
-                        color: schedule.isEnabled
-                            ? Colors.black
-                            : kUnhighlightedColor,
-                        fontSize: height / 60),
-                  )
-                ])),
-              ),
-              Switch(
-                  activeColor: kPrimaryColor,
-                  value: schedule.isEnabled,
-                  onChanged: (value) {
-                    setState(() {
-                      schedule.isEnabled = value;
-                    });
-                  })
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                border: Border.all(
+                          fontSize: height / 60),
+                    )
+                  ])),
+                ),
+                Container(
+                  width: width * 0.2,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Switch(
+                        activeColor: kPrimaryColor,
+                        value: schedule.isEnabled,
+                        onChanged: (value) {
+                          setState(() {
+                            schedule.isEnabled = value;
+                          });
+                        }),
+                  ),
+                )
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: schedule.isEnabled
+                          ? kSecondaryColor
+                          : kUnhighlightedColor),
+                  borderRadius: BorderRadius.circular(8)),
+              child: Text(
+                parseFromList(schedule.daysInWeek),
+                style: TextStyle(
                     color: schedule.isEnabled
                         ? kSecondaryColor
-                        : kUnhighlightedColor),
-                borderRadius: BorderRadius.circular(8)),
-            child: Text(
-              parseFromList(schedule.daysInWeek),
-              style: TextStyle(
-                  color: schedule.isEnabled
-                      ? kSecondaryColor
-                      : kUnhighlightedColor),
+                        : kUnhighlightedColor,
+                    fontSize: height / 70),
+              ),
             ),
-          ),
-          Text(
-            "${parseFromTimeOfDay(schedule.from)} - ${parseFromTimeOfDay(schedule.to)}",
-            style: TextStyle(
-                fontSize: (height / 20),
-                color: schedule.isEnabled ? Colors.black : kUnhighlightedColor),
-          ),
-        ],
+            Text(
+              "${parseFromTimeOfDay(schedule.from)} - ${parseFromTimeOfDay(schedule.to)}",
+              style: TextStyle(
+                  fontSize: (width / 10),
+                  color:
+                      schedule.isEnabled ? Colors.black : kUnhighlightedColor),
+            ),
+          ],
+        ),
       ),
     );
   }

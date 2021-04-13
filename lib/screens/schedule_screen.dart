@@ -19,8 +19,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
         body: Column(
       children: [
         Container(
-          padding: EdgeInsets.fromLTRB(
-              height * 0.01, height * 0.05, height * 0.03, height * 0.03),
+          padding: EdgeInsets.fromLTRB(0, 50, 30, 30),
           child: Column(
             children: [
               Column(
