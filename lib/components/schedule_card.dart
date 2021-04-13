@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter_go_app/model/Schedule.dart';
 import 'package:flutter_go_app/screens/adding_schedule_screen.dart';
+import 'package:flutter_go_app/model/Time.dart';
 
 // ignore: must_be_immutable
 class ScheduleCard extends StatefulWidget {
   Schedule schedule;
-  ScheduleCard({@required this.schedule});
+  final ValueChanged<Schedule> onScheduleChange;
+  ScheduleCard({@required this.onScheduleChange, @required this.schedule});
   @override
   State<StatefulWidget> createState() => ScheduleCardState();
 }
@@ -29,13 +31,13 @@ class ScheduleCardState extends State<ScheduleCard> {
     return everyday ? "Mỗi ngày" : result.substring(0, result.length - 2);
   }
 
-  String parseFromTimeOfDay(TimeOfDay t) {
+  String parseFromTime(Time t) {
     String result = "";
 
-    if (t.hour < 10) result += "0";
+    if ((t.hour) < 10) result += "0";
     result += t.hour.toString();
     result += ":";
-    if (t.minute < 10) result += "0";
+    if ((t.minute) < 10) result += "0";
     result += t.minute.toString();
     return result;
   }
@@ -53,9 +55,9 @@ class ScheduleCardState extends State<ScheduleCard> {
                 builder: (context) => AddingScheduleScreen(
                       schedule: widget.schedule,
                     )));
-        setState(() {
-          widget.schedule = schedule;
-        });
+        widget.onScheduleChange(schedule);
+        widget.schedule = schedule;
+        setState(() {});
       },
       child: Container(
         decoration: BoxDecoration(
@@ -127,7 +129,7 @@ class ScheduleCardState extends State<ScheduleCard> {
               ),
             ),
             Text(
-              "${parseFromTimeOfDay(schedule.from)} - ${parseFromTimeOfDay(schedule.to)}",
+              "${parseFromTime(schedule.pickTime)} - ${parseFromTime(schedule.dropTime)}",
               style: TextStyle(
                   fontSize: (width / 10),
                   color:

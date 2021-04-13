@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_go_app/model/Person.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter_go_app/model/Driver.dart';
 import 'package:flutter_go_app/components/driver_info_card.dart';
-import 'package:flutter_go_app/components/constants.dart';
 
 class DriverChoosingScreen extends StatefulWidget {
   DriverChoosingScreen();
@@ -17,7 +15,7 @@ class DriverChoosingScreen extends StatefulWidget {
 }
 
 Future<List<Driver>> listDrivers() async {
-  final url = '$publicIP:8080';
+  final url = '$publicIP:12345';
   final response = await http.get(Uri.http(url, "/person"));
   Iterable l = json.decode(response.body);
 
