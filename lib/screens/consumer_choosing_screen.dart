@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/components/constants.dart';
+import 'package:flutter_go_app/screens/schedule_screen.dart';
 
 import 'driver_choosing_screen.dart';
 
@@ -114,17 +115,18 @@ class ConsumerChoosingScreenState extends State<ConsumerChoosingScreen> {
                     ? null
                     : Transform.scale(
                         scale: 1.2,
-                        child: MaterialButton(
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: kPrimaryColor),
                             onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          DriverChoosingScreen()));
+                                      builder: (context) => ScheduleScreen()));
                             },
                             child: Text("Tiếp tục",
                                 style: TextStyle(
-                                  color: kPrimaryColor,
+                                  color: Colors.white,
                                 ))),
                       ),
               )

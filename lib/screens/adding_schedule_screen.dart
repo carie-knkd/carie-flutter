@@ -201,9 +201,6 @@ class AddingScheduleScreenState extends State<AddingScheduleScreen> {
                 ],
               ),
             ),
-            // SizedBox(
-            //   height: height * 0.01,
-            // ),
             Container(
               height: height / 19,
               width: height / 2.7,
@@ -248,66 +245,62 @@ class AddingScheduleScreenState extends State<AddingScheduleScreen> {
             SizedBox(
               height: height * 0.02,
             ),
-            Container(
-              width: height / 4,
-              height: height / 20,
-              decoration: BoxDecoration(
-                  color: kPrimaryColor, borderRadius: BorderRadius.circular(8)),
-              child: MaterialButton(
-                splashColor: kPrimaryColor,
-                onPressed: () {
-                  if (content.text.length == 0) {
-                    showDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                            title: Text("Hãy nhập nội dung lịch trình")));
-                    return;
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: kPrimaryColor,
+                  minimumSize: Size(height / 5, height / 20)),
+              onPressed: () {
+                if (content.text.length == 0) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                          title: Text("Hãy nhập nội dung lịch trình")));
+                  return;
+                }
+                if (description.text.length == 0) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                          title: Text("Hãy nhập mô tả lịch trình")));
+                  return;
+                }
+                bool atLeastOne = false;
+                for (int i = 0; i < 7; i++) {
+                  if (daysInWeek[i]) {
+                    atLeastOne = true;
+                    break;
                   }
-                  if (description.text.length == 0) {
-                    showDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                            title: Text("Hãy nhập mô tả lịch trình")));
-                    return;
-                  }
-                  bool atLeastOne = false;
-                  for (int i = 0; i < 7; i++) {
-                    if (daysInWeek[i]) {
-                      atLeastOne = true;
-                      break;
-                    }
-                  }
-                  if (!atLeastOne) {
-                    showDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                            title: Text("Hãy chọn ít nhất một ngày")));
-                    return;
-                  }
-                  if (to.isBefore(from)) {
-                    showDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                            title: Text("Hãy chọn ngày hợp lệ")));
-                    return;
-                  }
-                  schedule = Schedule(
-                      content: content.text,
-                      description: description.text,
-                      pickTime: Time(hour: fromHour, minute: fromMinute),
-                      dropTime: Time(hour: toHour, minute: toMinute),
-                      daysInWeek: daysInWeek,
-                      from: from,
-                      to: to);
-                  Navigator.pop(context, schedule);
-                },
-                child: Text(
-                  "Tạo lịch",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
+                }
+                if (!atLeastOne) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                          title: Text("Hãy chọn ít nhất một ngày")));
+                  return;
+                }
+                if (to.isBefore(from)) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                          title: Text("Hãy chọn ngày hợp lệ")));
+                  return;
+                }
+                schedule = Schedule(
+                    content: content.text,
+                    description: description.text,
+                    pickTime: Time(hour: fromHour, minute: fromMinute),
+                    dropTime: Time(hour: toHour, minute: toMinute),
+                    daysInWeek: daysInWeek,
+                    from: from,
+                    to: to);
+                Navigator.pop(context, schedule);
+              },
+              child: Text(
+                "Tạo lịch",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-            )
+            ),
           ],
         ),
       ),

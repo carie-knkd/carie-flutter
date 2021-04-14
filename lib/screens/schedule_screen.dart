@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/model/User.dart';
+import 'package:flutter_go_app/screens/driver_choosing_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter_go_app/components/schedule_card.dart';
@@ -60,28 +61,25 @@ class ScheduleScreenState extends State<ScheduleScreen> {
               SizedBox(height: height * 0.03),
               Align(
                 alignment: Alignment.centerRight,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: kPrimaryColor,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: MaterialButton(
-                    child: Text(
-                      "Thêm lịch",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    splashColor: kPrimaryColor,
-                    onPressed: () async {
-                      print("SCHEDULE ADDED");
-                      final Schedule schedule = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddingScheduleScreen()));
-                      if (schedule != null)
-                        setState(() {
-                          list.add(schedule);
-                        });
-                    },
+                child: ElevatedButton(
+                  child: Text(
+                    "Thêm lịch",
+                    style: TextStyle(color: Colors.white),
                   ),
+                  style: ElevatedButton.styleFrom(
+                      primary: kPrimaryColor,
+                      minimumSize: Size(height / 10, height / 20)),
+                  onPressed: () async {
+                    print("SCHEDULE ADDED");
+                    final Schedule schedule = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddingScheduleScreen()));
+                    if (schedule != null)
+                      setState(() {
+                        list.add(schedule);
+                      });
+                  },
                 ),
               )
             ],
@@ -116,34 +114,35 @@ class ScheduleScreenState extends State<ScheduleScreen> {
           height: height / 20,
         ),
         Container(
-          width: height / 5,
-          decoration: BoxDecoration(
-            color: kPrimaryColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
           child: list.length == 0
               ? null
-              : MaterialButton(
-                  splashColor: kPrimaryColor,
+              : ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: kPrimaryColor,
+                      minimumSize: Size(height / 8, height / 20)),
                   onPressed: () async {
                     User user = User(
                         id: '1', phoneNumber: '0987532942', scheduleList: list);
                     //print((user.toJson()));
                     print(json.encode(user.toJson()));
-                    showDialog(
-                        context: context,
-                        builder: (context) => Dialog(
-                              child: FutureBuilder(
-                                future: addUser(user),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData)
-                                    return snapshot.data;
-                                  else if (snapshot.hasError)
-                                    return Text("${snapshot.error}");
-                                  return CircularProgressIndicator();
-                                },
-                              ),
-                            ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DriverChoosingScreen()));
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (context) => Dialog(
+                    //           child: FutureBuilder(
+                    //             future: addUser(user),
+                    //             builder: (context, snapshot) {
+                    //               if (snapshot.hasData)
+                    //                 return snapshot.data;
+                    //               else if (snapshot.hasError)
+                    //                 return Text("${snapshot.error}");
+                    //               return CircularProgressIndicator();
+                    //             },
+                    //           ),
+                    //         ));
                   },
                   child: Text(
                     "Xác nhận",
