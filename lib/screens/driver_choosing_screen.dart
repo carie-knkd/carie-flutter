@@ -1,14 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_go_app/model/Person.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter_go_app/model/Driver.dart';
-import 'package:flutter_go_app/components/driver_info_widget.dart';
-import 'package:flutter_go_app/components/constants.dart';
+import 'package:flutter_go_app/components/driver_info_card.dart';
 
 class DriverChoosingScreen extends StatefulWidget {
   DriverChoosingScreen();
@@ -16,20 +14,15 @@ class DriverChoosingScreen extends StatefulWidget {
   State<DriverChoosingScreen> createState() => DriverChoosingScreenState();
 }
 
-void listDrivers() async {
-  final url = 'http://$publicIP:12345/person';
-  print(url);
-  final client = new HttpClient();
-  final request =
-      await client.getUrl(Uri.parse(url)).timeout(Duration(seconds: 10));
-  final response = await request.close();
-  print(response.statusCode);
-  print(response.contentLength);
-  // Iterable l = json.decode(response.body);
-  // List<Person> list =
-  //     List<Driver>.from(l.map((e) => Driver.fromJson(e)).toList());
-  // return list;
-  // return null;
+Future<List<Driver>> listDrivers() async {
+  final url = '$publicIP:12345';
+  final response = await http.get(Uri.http(url, "/person"));
+  Iterable l = json.decode(response.body);
+
+  List<Person> list =
+      List<Driver>.from(l.map((e) => Driver.fromJson(e)).toList());
+  return list;
+  //return null;
 }
 
 class DriverChoosingScreenState extends State<DriverChoosingScreen> {
@@ -48,10 +41,6 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
             padding: EdgeInsets.all(10),
             child: Column(
               children: [
-                MaterialButton(
-                  onPressed: () => listDrivers(),
-                  child: Text("List Drivers"),
-                ),
                 Text(
                   "Xin chào bla bla",
                   style: TextStyle(
@@ -73,39 +62,39 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
             padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
             margin: EdgeInsets.symmetric(vertical: 20.0),
             height: height * 0.69,
-            child: GridView.builder(
-              scrollDirection: Axis.vertical,
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-              itemCount: drivers.length,
-              itemBuilder: (context, index) => Column(
-                children: [DriverInfoWidget(drivers[index])],
-              ),
-            ),
-            // child: FutureBuilder(
-            //   future: listDrivers(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasError)
-            //       print(
-            //         snapshot.error,
-            //       );
-            //     else if (snapshot.hasData) {
-            //       List<Person> list = snapshot.data;
-            //       return GridView.builder(
-            //         scrollDirection: Axis.vertical,
-            //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //             crossAxisCount: 2),
-            //         itemCount: list.length,
-            //         itemBuilder: (context, index) => Column(
-            //           children: [DriverInfoWidget(list[index])],
-            //         ),
-            //       );
-            //     }
-            //     return Center(
-            //       child: CircularProgressIndicator(),
-            //     );
-            //   },
+            // child: GridView.builder(
+            //   scrollDirection: Axis.vertical,
+            //   gridDelegate:
+            //       SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            //   itemCount: drivers.length,
+            //   itemBuilder: (context, index) => Column(
+            //     children: [DriverInfoWidget(drivers[index])],
+            //   ),
             // ),
+            child: FutureBuilder(
+              future: listDrivers(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError)
+                  print(
+                    snapshot.error,
+                  );
+                else if (snapshot.hasData) {
+                  List<Driver> list = snapshot.data;
+                  return GridView.builder(
+                    scrollDirection: Axis.vertical,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2),
+                    itemCount: list.length,
+                    itemBuilder: (context, index) => Column(
+                      children: [DriverInfoWidget(driver: list[index])],
+                    ),
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
           ),
         ]));
   }

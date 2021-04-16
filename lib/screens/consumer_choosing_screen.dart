@@ -19,7 +19,6 @@ class ConsumerChoosingScreenState extends State<ConsumerChoosingScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
-        
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
@@ -41,7 +40,7 @@ class ConsumerChoosingScreenState extends State<ConsumerChoosingScreen> {
             padding: EdgeInsets.fromLTRB(20, 0, 0, 40),
             child: Text(
               "Bạn cần đưa đón trẻ",
-              style: TextStyle(color: kPrimaryColor, fontSize: 18),
+              style: TextStyle(color: kPrimaryColor, fontSize: height / 35),
             ),
           ),
           Center(

@@ -2,8 +2,6 @@ import 'package:international_phone_input/international_phone_input.dart';
 import 'consumer_choosing_screen.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_go_app/components/driver_info_widget.dart';
-import 'package:flutter_go_app/model/Driver.dart';
 
 class PhoneScreen extends StatefulWidget {
   PhoneScreen();
