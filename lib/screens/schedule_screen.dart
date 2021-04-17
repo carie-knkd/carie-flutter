@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/model/User.dart';
+import 'package:flutter_go_app/screens/daily_screen.dart';
 import 'package:flutter_go_app/screens/driver_choosing_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_go_app/components/constants.dart';
@@ -128,7 +129,8 @@ class ScheduleScreenState extends State<ScheduleScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DriverChoosingScreen()));
+                            builder: (context) => DailyScreen(),
+                            settings: RouteSettings(arguments: list)));
                     // showDialog(
                     //     context: context,
                     //     builder: (context) => Dialog(
