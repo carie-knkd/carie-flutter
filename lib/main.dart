@@ -3,6 +3,7 @@ import 'package:flutter_go_app/components/date_selector.dart';
 import 'package:flutter_go_app/screens/daily_screen.dart';
 import 'package:flutter_go_app/screens/driver_choosing_screen.dart';
 import 'package:flutter_go_app/components/location_map.dart';
+import 'package:flutter_go_app/screens/location_select_screen.dart';
 import 'package:flutter_go_app/screens/phone_screen.dart';
 import 'package:flutter_go_app/screens/schedule_screen.dart';
 

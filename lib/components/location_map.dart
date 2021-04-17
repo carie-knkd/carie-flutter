@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -14,6 +12,12 @@ class LocationMap extends StatefulWidget {
 }
 
 class _LocationMapState extends State<LocationMap> {
+  final HCMBaseLatLng = LatLng(10.76, 106.66);
+  final lines = [
+    new LatLng(11.76, 107.66),
+    new LatLng(12.76, 108.66),
+    new LatLng(13.76, 109.66),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +28,6 @@ class _LocationMapState extends State<LocationMap> {
           height: widget.height,
           child: Column(
             children: [
-              TextFormField(
-                decoration: InputDecoration(hintText: "Nhập vị trí"),
-              ),
               Container(
                 height: widget.height,
                 child: FlutterMap(
@@ -40,22 +41,25 @@ class _LocationMapState extends State<LocationMap> {
                           "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                       subdomains: ['a', 'b', 'c'],
                     ),
-                    MarkerLayerOptions(
-                      markers: [
-                        Marker(
-                          width: 80.0,
-                          height: 80.0,
-                          point: LatLng(10.76, 106.66),
-                          builder: (ctx) => Container(
-                            child: Icon(
-                              Icons.location_on,
-                              color: kPrimaryColor,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // PolylineLayerOptions(polylines: [new Polyline()]),
+                    // MarkerLayerOptions(
+                    //   markers: [
+                    //     Marker(
+                    //       width: 80.0,
+                    //       height: 80.0,
+                    //       point: LatLng(10.76, 106.66),
+                    //       builder: (ctx) => Container(
+                    //         child: Icon(
+                    //           Icons.location_on,
+                    //           color: kPrimaryColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    PolylineLayerOptions(polylines: [
+                      new Polyline(
+                          points: lines, strokeWidth: 5.0, color: Colors.red),
+                    ]),
                   ],
                 ),
               ),
