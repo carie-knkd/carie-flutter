@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/components/date_selector.dart';
 import 'package:flutter_go_app/components/timetable_card.dart';
 import 'package:flutter_go_app/model/Schedule.dart';
+import 'package:flutter_go_app/model/User.dart';
 import 'package:intl/intl.dart';
 
 class DailyScreen extends StatefulWidget {
@@ -25,10 +28,9 @@ class DailyScreenState extends State<DailyScreen> {
   };
   @override
   Widget build(BuildContext context) {
-    print("refresh 2");
-    print(DateFormat('EEEE').format(currentDay));
     List<TimetableCard> listCards = [];
-    list = ModalRoute.of(context).settings.arguments;
+    User user = ModalRoute.of(context).settings.arguments;
+    list = user.scheduleList;
 
     for (Schedule s in list) {
       if (s.daysInWeek[daysIndex[DateFormat('EEEE').format(currentDay)]] &&
@@ -39,6 +41,7 @@ class DailyScreenState extends State<DailyScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.fromLTRB(10, 50, 10, 10),
         child: Column(
@@ -48,7 +51,6 @@ class DailyScreenState extends State<DailyScreen> {
               initialDate: currentDay,
               onDateSelectedChanged: (value) {
                 setState(() {
-                  print("refresh 1");
                   currentDay = value;
                 });
               },

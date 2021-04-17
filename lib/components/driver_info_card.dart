@@ -10,7 +10,6 @@ class DriverInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double height = size.height;
-    double width = size.width;
 
     return GestureDetector(
         onTap: () {
@@ -154,7 +153,7 @@ void showDriverInfo(BuildContext context, Driver driver) {
                   //   height: height * 0.1,
                   // ),
                   ElevatedButton(
-                    onPressed: () => print("BOOK"),
+                    onPressed: () {},
                     child: Text("BOOK TÀI XẾ"),
                     style: ElevatedButton.styleFrom(primary: kPrimaryColor),
                   ),

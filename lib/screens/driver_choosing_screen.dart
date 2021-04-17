@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_go_app/screens/daily_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_go_app/model/Person.dart';
 import 'package:flutter_go_app/components/constants.dart';
@@ -16,8 +17,7 @@ class DriverChoosingScreen extends StatefulWidget {
 }
 
 Future<List<Driver>> listDrivers() async {
-  final url = '192.168.88.8:12345';
-  final response = await http.get(Uri.http(url, "/person"));
+  final response = await http.get(Uri.http(publicIP, "/driver"));
   Iterable l = json.decode(response.body);
 
   List<Person> list =
@@ -46,13 +46,6 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
             padding: EdgeInsets.all(10),
             child: Column(
               children: [
-                Text(
-                  "Xin chào Huy",
-                  style: TextStyle(
-                      fontSize: height / 20,
-                      fontWeight: FontWeight.bold,
-                      color: kPrimaryColor),
-                ),
                 SizedBox(
                   height: height / 45,
                 ),
@@ -100,6 +93,19 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
               },
             ),
           ),
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DailyScreen(),
+                    settings: RouteSettings(
+                        arguments: ModalRoute.of(context).settings.arguments))),
+            child: Text(
+              "Hoàn thành",
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+          )
         ]));
   }
 }

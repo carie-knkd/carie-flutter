@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 
 class Time {
@@ -7,10 +9,12 @@ class Time {
   Time({@required this.hour, @required this.minute});
 
   factory Time.fromJson(Map<String, dynamic> json) {
-    return Time(hour: json['hour'], minute: json['minute']);
+    return Time(
+        hour: int.parse(json['hour']), minute: int.parse(json['minute']));
   }
 
-  Map<String, dynamic> toJson() => {'hour': hour, 'minute': minute};
+  Map<String, dynamic> toJson() =>
+      {'hour': hour.toString(), 'minute': minute.toString()};
 
   String toString() {
     return (hour < 10 ? "0" : "") +
