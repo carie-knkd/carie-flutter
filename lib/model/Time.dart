@@ -11,4 +11,12 @@ class Time {
   }
 
   Map<String, dynamic> toJson() => {'hour': hour, 'minute': minute};
+
+  String toString() {
+    return (hour < 10 ? "0" : "") +
+        hour.toString() +
+        ":" +
+        (minute < 10 ? "0" : "") +
+        minute.toString();
+  }
 }

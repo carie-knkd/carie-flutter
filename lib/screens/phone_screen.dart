@@ -1,4 +1,3 @@
-import 'package:international_phone_input/international_phone_input.dart';
 import 'consumer_choosing_screen.dart';
 import 'package:flutter_go_app/components/phone_input.dart';
 import 'package:flutter_go_app/components/constants.dart';

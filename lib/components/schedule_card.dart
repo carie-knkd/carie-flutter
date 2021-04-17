@@ -5,9 +5,8 @@ import 'package:flutter_go_app/model/Schedule.dart';
 import 'package:flutter_go_app/screens/adding_schedule_screen.dart';
 import 'package:flutter_go_app/model/Time.dart';
 
-// ignore: must_be_immutable
 class ScheduleCard extends StatefulWidget {
-  Schedule schedule;
+  final Schedule schedule;
   final ValueChanged<Schedule> onScheduleChange;
   ScheduleCard({@required this.onScheduleChange, @required this.schedule});
   @override
@@ -49,15 +48,13 @@ class ScheduleCardState extends State<ScheduleCard> {
     double width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () async {
-        final Schedule schedule = await Navigator.push(
+        final Schedule upcoming = await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => AddingScheduleScreen(
                       schedule: widget.schedule,
                     )));
-        widget.onScheduleChange(schedule);
-        widget.schedule = schedule;
-        setState(() {});
+        if (upcoming != null) widget.onScheduleChange(upcoming);
       },
       child: Container(
         decoration: BoxDecoration(
