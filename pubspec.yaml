@@ -25,6 +25,7 @@ dependencies:
   http : any
   international_phone_input: ^1.0.4
   intl: ^0.17.0
+  flutter_map: any
   flutter:
     sdk: flutter
     
