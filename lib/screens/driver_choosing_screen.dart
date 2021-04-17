@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_go_app/screens/daily_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_go_app/model/Person.dart';
 import 'package:flutter_go_app/components/constants.dart';
@@ -16,8 +17,7 @@ class DriverChoosingScreen extends StatefulWidget {
 }
 
 Future<List<Driver>> listDrivers() async {
-  final url = '$publicIP:12345';
-  final response = await http.get(Uri.http(url, "/person"));
+  final response = await http.get(Uri.http(publicIP, "/driver"));
   Iterable l = json.decode(response.body);
 
   List<Person> list =
@@ -46,13 +46,6 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
             padding: EdgeInsets.all(10),
             child: Column(
               children: [
-                Text(
-                  "Xin chào Huy",
-                  style: TextStyle(
-                      fontSize: height / 20,
-                      fontWeight: FontWeight.bold,
-                      color: kPrimaryColor),
-                ),
                 SizedBox(
                   height: height / 45,
                 ),
@@ -66,40 +59,53 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
             padding: EdgeInsets.fromLTRB(height / 180, 0, height / 180, 0),
             margin: EdgeInsets.symmetric(vertical: 20.0),
             height: height * 0.69,
-            child: GridView.builder(
-              scrollDirection: Axis.vertical,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisSpacing: height / 30),
-              itemCount: drivers.length,
-              itemBuilder: (context, index) => Column(
-                children: [DriverInfoWidget(driver: drivers[index])],
-              ),
-            ),
-            // child: FutureBuilder(
-            //   future: listDrivers(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasError)
-            //       print(
-            //         snapshot.error,
-            //       );
-            //     else if (snapshot.hasData) {
-            //       List<Driver> list = snapshot.data;
-            //       return GridView.builder(
-            //         scrollDirection: Axis.vertical,
-            //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //             crossAxisCount: 2),
-            //         itemCount: list.length,
-            //         itemBuilder: (context, index) => Column(
-            //           children: [DriverInfoWidget(driver: list[index])],
-            //         ),
-            //       );
-            //     }
-            //     return Center(
-            //       child: CircularProgressIndicator(),
-            //     );
-            //   },
+            // child: GridView.builder(
+            //   scrollDirection: Axis.vertical,
+            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 2, mainAxisSpacing: height / 30),
+            //   itemCount: drivers.length,
+            //   itemBuilder: (context, index) => Column(
+            //     children: [DriverInfoWidget(driver: drivers[index])],
+            //   ),
             // ),
+            child: FutureBuilder(
+              future: listDrivers(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError)
+                  print(
+                    snapshot.error,
+                  );
+                else if (snapshot.hasData) {
+                  List<Driver> list = snapshot.data;
+                  return GridView.builder(
+                    scrollDirection: Axis.vertical,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, mainAxisSpacing: 30),
+                    itemCount: list.length,
+                    itemBuilder: (context, index) => Column(
+                      children: [DriverInfoWidget(driver: list[index])],
+                    ),
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
           ),
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DailyScreen(),
+                    settings: RouteSettings(
+                        arguments: ModalRoute.of(context).settings.arguments))),
+            child: Text(
+              "Hoàn thành",
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+          )
         ]));
   }
 }

@@ -17,7 +17,7 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 Future<http.Response> addUser(User user) async {
-  final response = await http.post(Uri.http("172.16.4.85:8080", "/person"),
+  final response = await http.post(Uri.http(publicIP, "/user"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
@@ -123,28 +123,28 @@ class ScheduleScreenState extends State<ScheduleScreen> {
                       minimumSize: Size(height / 8, height / 20)),
                   onPressed: () async {
                     User user = User(
-                        id: '1', phoneNumber: '0987532942', scheduleList: list);
-                    //print((user.toJson()));
-                    print(json.encode(user.toJson()));
+                        phoneNumber: ModalRoute.of(context).settings.arguments,
+                        scheduleList: list);
+                    showDialog(
+                        context: context,
+                        builder: (context) => Dialog(
+                              child: FutureBuilder(
+                                future: addUser(user),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData)
+                                    return Text("${snapshot.data}");
+                                  else if (snapshot.hasError)
+                                    return Text("${snapshot.error}");
+                                  return CircularProgressIndicator();
+                                },
+                              ),
+                            ));
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DailyScreen(),
-                            settings: RouteSettings(arguments: list)));
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (context) => Dialog(
-                    //           child: FutureBuilder(
-                    //             future: addUser(user),
-                    //             builder: (context, snapshot) {
-                    //               if (snapshot.hasData)
-                    //                 return snapshot.data;
-                    //               else if (snapshot.hasError)
-                    //                 return Text("${snapshot.error}");
-                    //               return CircularProgressIndicator();
-                    //             },
-                    //           ),
-                    //         ));
+                          builder: (context) => DriverChoosingScreen(),
+                          settings: RouteSettings(arguments: user),
+                        ));
                   },
                   child: Text(
                     "Xác nhận",

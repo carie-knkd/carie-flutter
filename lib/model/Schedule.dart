@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/model/Time.dart';
 
@@ -20,9 +22,9 @@ class Schedule {
       @required this.to,
       this.isEnabled = true});
 
-  factory Schedule.fromJson(Map<String, dynamic> json) {
+  static Schedule fromJson(Map<String, dynamic> json) {
     String days = json['daysinweek'];
-    List<bool> daysInWeek;
+    List<bool> daysInWeek = [];
     for (int i = 0; i < 7; i++) {
       if (days[i] == '0')
         daysInWeek.add(false);
@@ -32,11 +34,11 @@ class Schedule {
     return Schedule(
         content: json['content'],
         description: json['description'],
-        pickTime: json['pickTime'],
-        dropTime: json['dropTime'],
+        pickTime: Time.fromJson(json['picktime']),
+        dropTime: Time.fromJson(json['droptime']),
         daysInWeek: daysInWeek,
-        from: json['from'],
-        to: json['to'],
+        from: DateTime.parse(json['from']),
+        to: DateTime.parse(json['to']),
         isEnabled: json['isenabled']);
   }
 
@@ -51,8 +53,8 @@ class Schedule {
     return {
       'content': content,
       'description': description,
-      'picktime': pickTime,
-      'droptime': dropTime,
+      'picktime': (pickTime.toJson()),
+      'droptime': (dropTime.toJson()),
       'daysinweek': days,
       'from': from.toIso8601String(),
       'to': to.toIso8601String(),

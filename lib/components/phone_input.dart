@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class PhoneInput extends StatefulWidget {
-  final ValueChanged onPhoneNumberTyped;
+  final ValueChanged<String> onPhoneNumberTyped;
   PhoneInput({@required this.onPhoneNumberTyped});
   @override
   State<StatefulWidget> createState() => PhoneInputState();
@@ -48,10 +48,7 @@ class PhoneInputState extends State<PhoneInput> {
                   color: Colors.white, borderRadius: BorderRadius.circular(8)),
               child: TextFormField(
                 onChanged: (phone) {
-                  if (phone.length >= 8)
-                    widget.onPhoneNumberTyped(true);
-                  else
-                    widget.onPhoneNumberTyped(false);
+                  widget.onPhoneNumberTyped(phone);
                 },
                 controller: controller,
                 cursorColor: Colors.black,

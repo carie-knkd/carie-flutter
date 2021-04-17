@@ -1,7 +1,14 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+import 'package:flutter_go_app/model/User.dart';
+import 'package:flutter_go_app/screens/daily_screen.dart';
+
 import 'consumer_choosing_screen.dart';
 import 'package:flutter_go_app/components/phone_input.dart';
 import 'package:flutter_go_app/components/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class PhoneScreen extends StatefulWidget {
   PhoneScreen();
@@ -10,7 +17,7 @@ class PhoneScreen extends StatefulWidget {
 }
 
 class PhoneScreenSstate extends State<PhoneScreen> {
-  String phoneNumber;
+  String phoneNumber = "";
   String phoneIsoCode;
   bool visible = false;
   String confirmedNumber = '';
@@ -30,10 +37,6 @@ class PhoneScreenSstate extends State<PhoneScreen> {
       visible = true;
       confirmedNumber = internationalizedPhoneNumber;
     });
-  }
-
-  bool isKeyBoardOn() {
-    return MediaQuery.of(context).viewInsets.bottom != 0;
   }
 
   bool isEnough = false;
@@ -57,19 +60,15 @@ class PhoneScreenSstate extends State<PhoneScreen> {
                   SizedBox(
                     height: height / 10,
                   ),
-                  Container(
-                    child: isKeyBoardOn()
-                        ? null
-                        : Text(
-                            "CARIE",
-                            style: TextStyle(
-                                fontSize: height / 10,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
+                  Text(
+                    "CARIE",
+                    style: TextStyle(
+                        fontSize: height / 10,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    height: height * 2 / 15,
+                    height: height / 15,
                   ),
                   Container(
                     padding: EdgeInsets.all(width * 0.04),
@@ -96,10 +95,10 @@ class PhoneScreenSstate extends State<PhoneScreen> {
                         )),
                   ),
                   PhoneInput(
-                    onPhoneNumberTyped: (value) {
+                    onPhoneNumberTyped: (String value) {
                       setState(() {
-                        isEnough = value;
-                        print(isEnough);
+                        isEnough = value.length > 8;
+                        phoneNumber = value;
                       });
                     },
                   ),
@@ -109,26 +108,56 @@ class PhoneScreenSstate extends State<PhoneScreen> {
             Positioned(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
                 child: Container(
-                    child: isKeyBoardOn()
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: kSecondaryColor),
-                            //splashColor: kPrimaryColor,
-                            onPressed: isEnough
-                                ? () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ConsumerChoosingScreen()))
-                                : null,
-                            child: Text(
-                              "Tiếp tục",
-                              style: TextStyle(
-                                  color: isEnough
-                                      ? Colors.white
-                                      : kUnhighlightedColor),
-                            ))
-                        : null)),
+                    child: ElevatedButton(
+                        style:
+                            ElevatedButton.styleFrom(primary: kSecondaryColor),
+                        //splashColor: kPrimaryColor,
+                        onPressed: isEnough
+                            ? () async {
+                                print(MediaQuery.of(context).viewInsets.bottom);
+                                Map<String, String> id = {
+                                  "phone": phoneNumber,
+                                };
+
+                                final response = await http
+                                    .get(Uri.http(publicIP, "/user", id));
+                                if (response.body ==
+                                    '{message: mongo: no documents in result }') {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ConsumerChoosingScreen(),
+                                          settings: RouteSettings(
+                                              arguments: phoneNumber)));
+                                } else {
+                                  print(response.body);
+                                  print(jsonDecode(response.body));
+                                  print("ok till here");
+                                  User user =
+                                      User.fromJson(jsonDecode(response.body));
+
+                                  print(response.statusCode);
+                                  if (response.statusCode == 200) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => DailyScreen(),
+                                            settings: RouteSettings(
+                                                arguments: user)));
+                                  } else
+                                    throw new Exception(
+                                        "Cant load user at phone screen");
+                                }
+                              }
+                            : null,
+                        child: Text(
+                          "Tiếp tục",
+                          style: TextStyle(
+                              color: isEnough
+                                  ? Colors.white
+                                  : kUnhighlightedColor),
+                        )))),
           ],
         )); // This trailing comma makes auto-formatting nicer for build methods.
   }

@@ -122,7 +122,11 @@ class ConsumerChoosingScreenState extends State<ConsumerChoosingScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ScheduleScreen()));
+                                      builder: (context) => ScheduleScreen(),
+                                      settings: RouteSettings(
+                                          arguments: ModalRoute.of(context)
+                                              .settings
+                                              .arguments)));
                             },
                             child: Text("Tiếp tục",
                                 style: TextStyle(
