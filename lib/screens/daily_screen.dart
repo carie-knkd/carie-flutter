@@ -33,7 +33,7 @@ class DailyScreenState extends State<DailyScreen> {
     for (Schedule s in list) {
       if (s.daysInWeek[daysIndex[DateFormat('EEEE').format(currentDay)]] &&
           s.from.isBefore(currentDay) &&
-          currentDay.isBefore(s.to)) {
+          currentDay.isBefore(s.to.add(Duration(days: 1)))) {
         listCards.add(TimetableCard(schedule: s));
       }
     }

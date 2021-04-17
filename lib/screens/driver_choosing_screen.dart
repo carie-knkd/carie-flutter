@@ -16,7 +16,7 @@ class DriverChoosingScreen extends StatefulWidget {
 }
 
 Future<List<Driver>> listDrivers() async {
-  final url = '$publicIP:12345';
+  final url = '192.168.88.8:12345';
   final response = await http.get(Uri.http(url, "/person"));
   Iterable l = json.decode(response.body);
 
@@ -66,39 +66,39 @@ class DriverChoosingScreenState extends State<DriverChoosingScreen> {
             padding: EdgeInsets.fromLTRB(height / 180, 0, height / 180, 0),
             margin: EdgeInsets.symmetric(vertical: 20.0),
             height: height * 0.69,
-            child: GridView.builder(
-              scrollDirection: Axis.vertical,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisSpacing: height / 30),
-              itemCount: drivers.length,
-              itemBuilder: (context, index) => Column(
-                children: [DriverInfoWidget(driver: drivers[index])],
-              ),
-            ),
-            // child: FutureBuilder(
-            //   future: listDrivers(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasError)
-            //       print(
-            //         snapshot.error,
-            //       );
-            //     else if (snapshot.hasData) {
-            //       List<Driver> list = snapshot.data;
-            //       return GridView.builder(
-            //         scrollDirection: Axis.vertical,
-            //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //             crossAxisCount: 2),
-            //         itemCount: list.length,
-            //         itemBuilder: (context, index) => Column(
-            //           children: [DriverInfoWidget(driver: list[index])],
-            //         ),
-            //       );
-            //     }
-            //     return Center(
-            //       child: CircularProgressIndicator(),
-            //     );
-            //   },
+            // child: GridView.builder(
+            //   scrollDirection: Axis.vertical,
+            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 2, mainAxisSpacing: height / 30),
+            //   itemCount: drivers.length,
+            //   itemBuilder: (context, index) => Column(
+            //     children: [DriverInfoWidget(driver: drivers[index])],
+            //   ),
             // ),
+            child: FutureBuilder(
+              future: listDrivers(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError)
+                  print(
+                    snapshot.error,
+                  );
+                else if (snapshot.hasData) {
+                  List<Driver> list = snapshot.data;
+                  return GridView.builder(
+                    scrollDirection: Axis.vertical,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, mainAxisSpacing: 30),
+                    itemCount: list.length,
+                    itemBuilder: (context, index) => Column(
+                      children: [DriverInfoWidget(driver: list[index])],
+                    ),
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
           ),
         ]));
   }
