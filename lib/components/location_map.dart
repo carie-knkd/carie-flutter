@@ -4,9 +4,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 class LocationMap extends StatefulWidget {
-  const LocationMap({Key key, this.width, this.height}) : super(key: key);
+  const LocationMap(
+      {Key key, this.width, this.height, this.initLat, this.initLng})
+      : super(key: key);
   final double width;
   final double height;
+  final double initLat;
+  final double initLng;
   @override
   _LocationMapState createState() => _LocationMapState();
 }
@@ -14,6 +18,7 @@ class LocationMap extends StatefulWidget {
 class _LocationMapState extends State<LocationMap> {
   final HCMBaseLatLng = LatLng(10.76, 106.66);
   final lines = [
+    new LatLng(10.76, 106.66),
     new LatLng(11.76, 107.66),
     new LatLng(12.76, 108.66),
     new LatLng(13.76, 109.66),
@@ -29,7 +34,7 @@ class _LocationMapState extends State<LocationMap> {
           child: Column(
             children: [
               Container(
-                height: widget.height,
+                height: widget.height - 50.0,
                 child: FlutterMap(
                   options: MapOptions(
                     center: LatLng(10.76, 106.66),
