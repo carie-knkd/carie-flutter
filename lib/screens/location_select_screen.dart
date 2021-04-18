@@ -19,17 +19,24 @@ class LocationSelectScreenState extends State<LocationSelectScreen> {
   double initLat = 0.0;
   double initLng = 0.0;
   // LocationSelectScreenState({@required this.projectName})
-  void getProjectByName(String name) async {
-    final response = await http
-        .get(Uri.http("192.168.7.231:12345", "/location?name=" + name));
+  Future<Project> getProjectByName(String name) async {
     print("___________________________________________");
-    print(response.body);
-    final project = Project.fromJson(jsonDecode(response.body));
+    var queryParameters = {
+      'name': nameController.text,
+    };
+    var url = Uri.http("192.168.43.45:12345", "/location", queryParameters);
+    print(url);
+    final response = await http.get(url).timeout(
+          Duration(seconds: 10),
+        );
 
+    final project = Project.fromJson(jsonDecode(response.body));
     setState(() {
-      // initLat = project.lat;
-      // initLng = project.lng;
+      initLat = double.parse(project.lat);
+      initLng = double.parse(project.lng);
     });
+    print(initLat.toString() + " " + initLng.toString());
+    return project;
   }
 
   // LocationSelectScreenState({
@@ -57,37 +64,45 @@ class LocationSelectScreenState extends State<LocationSelectScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    print("___________________________________________");
-                    var queryParameters = {
-                      'name': nameController.text,
-                    };
-                    var url = Uri.http(
-                        "192.168.43.45:12345", "/location", queryParameters);
-                    print(url);
-                    final response = await http.get(url).timeout(
-                          Duration(seconds: 10),
-                        );
-
-                    final project = Project.fromJson(jsonDecode(response.body));
-                    setState(() {
-                      initLat = double.parse(project.lat);
-                      initLng = double.parse(project.lng);
-                    });
-                    print(initLat.toString() + " " + initLng.toString());
-                    // print(initLat.toString() + " " + initLng.toString());
+                    Project project =
+                        await getProjectByName(nameController.text);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LocationMap(
+                                width: size.width,
+                                height: size.height - 100.0,
+                                initLat: double.parse(project.lat),
+                                initLng: double.parse(project.lng))));
                   },
                   child: Text("Xác nhận"),
                 ),
-                Container(
-                  width: size.width,
-                  height: size.height - 100.0,
-                  child: LocationMap(
-                    initLat: initLat,
-                    initLng: initLng,
-                    width: size.width,
-                    height: size.height,
-                  ),
-                ),
+                // Container(
+                //   width: size.width,
+                //   height: size.height - 100.0,
+                // child: FutureBuilder(
+                //   future: getProjectByName(nameController.text),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasError)
+                //       print(snapshot.error);
+                //     else if (snapshot.hasData) {
+                //       return LocationMap(
+                //           initLat: double.parse(snapshot.data.lat),
+                //           initLng: double.parse(snapshot.data.lng),
+                //           width: size.width,
+                //           height: size.height);
+                //     }
+                //     return Center(
+                //       child: CircularProgressIndicator(),
+                //     );
+                //   },
+                // ),
+                // child: LocationMap(
+                //   initLat: initLat,
+                //   initLng: initLng,
+                //   width: size.width,
+                //   height: size.height,
+                // ),
               ],
             ),
           ),
