@@ -17,14 +17,13 @@ class LocationMap extends StatefulWidget {
 
 class _LocationMapState extends State<LocationMap> {
   final HCMBaseLatLng = LatLng(10.76, 106.66);
-  final lines = [
-    new LatLng(10.76, 106.66),
-    new LatLng(11.76, 107.66),
-    new LatLng(12.76, 108.66),
-    new LatLng(13.76, 109.66),
-  ];
+
   @override
   Widget build(BuildContext context) {
+    final lines = [
+      new LatLng(10.870988086855629, 106.77825484166709),
+      new LatLng(widget.initLat, widget.initLng)
+    ];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -56,10 +55,10 @@ class _LocationMapState extends State<LocationMap> {
                   ),
                 ],
               ),
-              // PolylineLayerOptions(polylines: [
-              //   new Polyline(
-              //       points: lines, strokeWidth: 5.0, color: Colors.red),
-              // ]),
+              PolylineLayerOptions(polylines: [
+                new Polyline(
+                    points: lines, strokeWidth: 5.0, color: Colors.red),
+              ]),
             ],
           ),
         ),
