@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class Project {
   final String id;
   final String name;
-  final double lat;
-  final double lng;
+  final String lat;
+  final String lng;
 
   Project(
       {@required this.id, this.name, @required this.lat, @required this.lng});

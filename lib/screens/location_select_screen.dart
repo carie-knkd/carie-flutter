@@ -15,17 +15,20 @@ class LocationSelectScreen extends StatefulWidget {
 }
 
 class LocationSelectScreenState extends State<LocationSelectScreen> {
-  TextEditingController nameController;
+  TextEditingController nameController = new TextEditingController(text: "");
   double initLat = 0.0;
   double initLng = 0.0;
   // LocationSelectScreenState({@required this.projectName})
-  Future<Project> getProjectByName(String name) async {
+  void getProjectByName(String name) async {
     final response = await http
-        .get(Uri.parse(publicIP + ":" + port + "/location?name=" + name));
+        .get(Uri.http("192.168.7.231:12345", "/location?name=" + name));
+    print("___________________________________________");
+    print(response.body);
     final project = Project.fromJson(jsonDecode(response.body));
+
     setState(() {
-      initLat = project.lat;
-      initLng = project.lng;
+      // initLat = project.lat;
+      // initLng = project.lng;
     });
   }
 
@@ -43,7 +46,7 @@ class LocationSelectScreenState extends State<LocationSelectScreen> {
         child: Center(
           child: Container(
             width: size.width * 0.9,
-            height: size.height - 80.0,
+            height: size.height - 100.0,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,19 +56,36 @@ class LocationSelectScreenState extends State<LocationSelectScreen> {
                   controller: nameController,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    print(nameController.text);
+                  onPressed: () async {
+                    print("___________________________________________");
+                    var queryParameters = {
+                      'name': nameController.text,
+                    };
+                    var url = Uri.http(
+                        "192.168.43.45:12345", "/location", queryParameters);
+                    print(url);
+                    final response = await http.get(url).timeout(
+                          Duration(seconds: 10),
+                        );
+
+                    final project = Project.fromJson(jsonDecode(response.body));
+                    setState(() {
+                      initLat = double.parse(project.lat);
+                      initLng = double.parse(project.lng);
+                    });
+                    print(initLat.toString() + " " + initLng.toString());
+                    // print(initLat.toString() + " " + initLng.toString());
                   },
                   child: Text("Xác nhận"),
                 ),
                 Container(
                   width: size.width,
-                  height: size.height,
+                  height: size.height - 100.0,
                   child: LocationMap(
                     initLat: initLat,
                     initLng: initLng,
                     width: size.width,
-                    height: size.height - 100.0,
+                    height: size.height,
                   ),
                 ),
               ],
