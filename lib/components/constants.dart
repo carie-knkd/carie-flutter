@@ -7,5 +7,9 @@ const Color kUnhighlightedColor = Color(0xFFE0E0E0);
 const double kDefaultPadding = 20.0;
 const double buttonConsumerHeight = 200;
 const double buttonConsumerWidth = 170;
-const String publicIP = "192.168.1.15:12345";
+
+const String publicIP = "192.168.43.45";
+const String port = '12345';
+const String baseUrl = "localhost:12345";
+
 // config

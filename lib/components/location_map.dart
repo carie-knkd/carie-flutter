@@ -4,65 +4,61 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 class LocationMap extends StatefulWidget {
-  const LocationMap({Key key, this.width, this.height}) : super(key: key);
+  const LocationMap(
+      {Key key, this.width, this.height, this.initLat, this.initLng})
+      : super(key: key);
   final double width;
   final double height;
+  final double initLat;
+  final double initLng;
   @override
   _LocationMapState createState() => _LocationMapState();
 }
 
 class _LocationMapState extends State<LocationMap> {
   final HCMBaseLatLng = LatLng(10.76, 106.66);
-  final lines = [
-    new LatLng(11.76, 107.66),
-    new LatLng(12.76, 108.66),
-    new LatLng(13.76, 109.66),
-  ];
+
   @override
   Widget build(BuildContext context) {
+    final lines = [
+      new LatLng(10.870988086855629, 106.77825484166709),
+      new LatLng(widget.initLat, widget.initLng)
+    ];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Container(
-          width: widget.width,
-          height: widget.height,
-          child: Column(
-            children: [
-              Container(
-                height: widget.height,
-                child: FlutterMap(
-                  options: MapOptions(
-                    center: LatLng(10.76, 106.66),
-                    zoom: 10.0,
-                  ),
-                  layers: [
-                    TileLayerOptions(
-                      urlTemplate:
-                          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                      subdomains: ['a', 'b', 'c'],
-                    ),
-                    // MarkerLayerOptions(
-                    //   markers: [
-                    //     Marker(
-                    //       width: 80.0,
-                    //       height: 80.0,
-                    //       point: LatLng(10.76, 106.66),
-                    //       builder: (ctx) => Container(
-                    //         child: Icon(
-                    //           Icons.location_on,
-                    //           color: kPrimaryColor,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    PolylineLayerOptions(polylines: [
-                      new Polyline(
-                          points: lines, strokeWidth: 5.0, color: Colors.red),
-                    ]),
-                  ],
-                ),
+          height: widget.height - 100.0,
+          child: FlutterMap(
+            options: MapOptions(
+              center: LatLng(widget.initLat, widget.initLng),
+              zoom: 18.0,
+            ),
+            layers: [
+              TileLayerOptions(
+                urlTemplate:
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                subdomains: ['a', 'b', 'c'],
               ),
+              MarkerLayerOptions(
+                markers: [
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: LatLng(widget.initLat, widget.initLng),
+                    builder: (ctx) => Container(
+                      child: Icon(
+                        Icons.location_on,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              PolylineLayerOptions(polylines: [
+                new Polyline(
+                    points: lines, strokeWidth: 5.0, color: Colors.red),
+              ]),
             ],
           ),
         ),

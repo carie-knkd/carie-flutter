@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_go_app/components/constants.dart';
+import 'package:flutter_go_app/components/location_map.dart';
 import 'package:flutter_go_app/components/time_selector.dart';
 import 'package:flutter_go_app/model/Schedule.dart';
 import 'package:flutter_go_app/model/Time.dart';
+import 'package:flutter_go_app/screens/location_select_screen.dart';
 import 'package:intl/intl.dart';
 
 class AddingScheduleScreen extends StatefulWidget {
@@ -118,8 +120,7 @@ class AddingScheduleScreenState extends State<AddingScheduleScreen> {
                 children: [
                   TextFormField(
                       controller: content,
-                      style: TextStyle(
-                          fontSize: height * 0.04, color: kPrimaryColor),
+                      style: TextStyle(fontSize: 18, color: kPrimaryColor),
                       decoration: InputDecoration(
                           hintText: "Nội dung",
                           hintStyle: TextStyle(color: kUnhighlightedColor),
@@ -129,7 +130,7 @@ class AddingScheduleScreenState extends State<AddingScheduleScreen> {
                               borderSide: BorderSide(color: kPrimaryColor)))),
                   Container(
                     padding: EdgeInsets.only(
-                        top: height * 0.01, bottom: height * 0.03),
+                        top: height * 0.01, bottom: height * 0.02),
                     width: height / 3,
                     child: TextFormField(
                       controller: description,
@@ -245,61 +246,86 @@ class AddingScheduleScreenState extends State<AddingScheduleScreen> {
             SizedBox(
               height: height * 0.02,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: kPrimaryColor,
-                  minimumSize: Size(height / 5, height / 20)),
-              onPressed: () {
-                if (content.text.length == 0) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                          title: Text("Hãy nhập nội dung lịch trình")));
-                  return;
-                }
-                if (description.text.length == 0) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                          title: Text("Hãy nhập mô tả lịch trình")));
-                  return;
-                }
-                bool atLeastOne = false;
-                for (int i = 0; i < 7; i++) {
-                  if (daysInWeek[i]) {
-                    atLeastOne = true;
-                    break;
-                  }
-                }
-                if (!atLeastOne) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                          title: Text("Hãy chọn ít nhất một ngày")));
-                  return;
-                }
-                if (to.isBefore(from)) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                          title: Text("Hãy chọn ngày hợp lệ")));
-                  return;
-                }
-                schedule = Schedule(
-                    content: content.text,
-                    description: description.text,
-                    pickTime: Time(hour: fromHour, minute: fromMinute),
-                    dropTime: Time(hour: toHour, minute: toMinute),
-                    daysInWeek: daysInWeek,
-                    from: from,
-                    to: to);
-                Navigator.pop(context, schedule);
-              },
-              child: Text(
-                "Tạo lịch",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
+            Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, //Center Column contents vertically,
+              crossAxisAlignment: CrossAxisAlignment
+                  .center, //Center Column contents horizontally,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: kPrimaryColor,
+                      minimumSize: Size(height / 6, height / 20)),
+                  onPressed: () {
+                    if (content.text.length == 0) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => CupertinoAlertDialog(
+                              title: Text("Hãy nhập nội dung lịch trình")));
+                      return;
+                    }
+                    if (description.text.length == 0) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => CupertinoAlertDialog(
+                              title: Text("Hãy nhập mô tả lịch trình")));
+                      return;
+                    }
+                    bool atLeastOne = false;
+                    for (int i = 0; i < 7; i++) {
+                      if (daysInWeek[i]) {
+                        atLeastOne = true;
+                        break;
+                      }
+                    }
+                    if (!atLeastOne) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => CupertinoAlertDialog(
+                              title: Text("Hãy chọn ít nhất một ngày")));
+                      return;
+                    }
+                    if (to.isBefore(from)) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => CupertinoAlertDialog(
+                              title: Text("Hãy chọn ngày hợp lệ")));
+                      return;
+                    }
+                    schedule = Schedule(
+                        content: content.text,
+                        description: description.text,
+                        pickTime: Time(hour: fromHour, minute: fromMinute),
+                        dropTime: Time(hour: toHour, minute: toMinute),
+                        daysInWeek: daysInWeek,
+                        from: from,
+                        to: to);
+                    Navigator.pop(context, schedule);
+                  },
+                  child: Text(
+                    "Tạo lịch",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: kPrimaryColor,
+                    minimumSize: Size(height / 6, height / 20),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LocationSelectScreen()));
+                  },
+                  child: Text(
+                    "Tiếp theo",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
             ),
           ],
         ),
